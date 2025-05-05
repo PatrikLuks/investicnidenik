@@ -1,0 +1,6 @@
+<h1>Seznam objektů</h1>
+<ul>
+    {% for objekt in objekty %}
+        <li><a href="{% url 'detail_objektu' objekt.id %}">{{ objekt.jméno }}</a></li>
+    {% endfor %}
+</ul>
