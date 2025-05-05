@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investiční deník</title>
+</head>
+<body>
+    <h1>Vítejte na stránce Investičního deníku!</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'asset_list' %}">Seznam aktiv</a></li>
+            <li><a href="{% url 'trade_list' %}">Obchody</a></li>
+            <li><a href="{% url 'note_list' %}">Poznámky</a></li>
+            <li><a href="{% url 'investment_list' %}">Investice</a></li>
+            <li><a href="{% url 'chart_kb' %}">Graf Komerční banky</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

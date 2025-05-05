@@ -1,7 +1,7 @@
-from django.urls import path
-from . import views
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-    path('', views.seznam_objektů, name='seznam_objektů'),
-    path('detail/<int:id>/', views.detail_objektu, name='detail_objektu'),
+    path('admin/', admin.site.urls),
+    path('', include('frontend.urls')),  # Propojení s frontend aplikací
 ]

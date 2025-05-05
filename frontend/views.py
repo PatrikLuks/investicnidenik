@@ -1,15 +1,30 @@
+import yfinance as yf
 from django.shortcuts import render
-from investicnidenik.models import Asset, Trade, Note, Investment
+import json
+
+def chart_kb(request):
+    ticker = yf.Ticker("KOMB.PR")  # ISIN Komerční banky v Praze (Yahoo symbol)
+    hist = ticker.history(period="6mo")  # posledních 6 měsíců
+    dates = hist.index.strftime('%Y-%m-%d').tolist()
+    prices = hist['Close'].tolist()
+
+    context = {
+        'dates': json.dumps(dates),
+        'prices': json.dumps(prices),
+    }
+    return render(request, 'chart_kb.html', context)
 
 def home(request):
-    assets = Asset.objects.all()
-    trades = Trade.objects.all()
-    notes = Note.objects.all()
-    investments = Investment.objects.all()
+    return render(request, 'home.html')
 
-    return render(request, 'frontend/home.html', {
-        'assets': assets,
-        'trades': trades,
-        'notes': notes,
-        'investments': investments,
-    })
+def asset_list(request):
+    return render(request, 'assets.html')
+
+def trade_list(request):
+    return render(request, 'trades.html')
+
+def note_list(request):
+    return render(request, 'notes.html')
+
+def investment_list(request):
+    return render(request, 'investments.html')
