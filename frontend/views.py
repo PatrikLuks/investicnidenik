@@ -3,8 +3,8 @@ from django.shortcuts import render
 import json
 
 def chart_kb(request):
-    ticker = yf.Ticker("KOMB.PR")  # ISIN Komerční banky v Praze (Yahoo symbol)
-    hist = ticker.history(period="6mo")  # posledních 6 měsíců
+    ticker = yf.Ticker("KOMB.PR")  # Symbol pro Komerční banku na Yahoo Finance
+    hist = ticker.history(period="6mo")  # Historie za posledních 6 měsíců
     dates = hist.index.strftime('%Y-%m-%d').tolist()
     prices = hist['Close'].tolist()
 

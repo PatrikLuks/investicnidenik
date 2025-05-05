@@ -1,30 +1,49 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komerční Banka - Akcie</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Graf ceny akcií Komerční Banky</h1>
+    <canvas id="stockChart" width="400" height="200"></canvas>
+    <script>
+        var dates = JSON.parse('{{ dates|escapejs }}');
+        var prices = JSON.parse('{{ prices|escapejs }}');
 
-{% block content %}
-<h2>📊 Komerční banka – vývoj ceny</h2>
-<canvas id="priceChart" width="800" height="400"></canvas>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-const ctx = document.getElementById('priceChart').getContext('2d');
-const chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: {{ dates|safe }},
-        datasets: [{
-            label: 'Cena akcie (CZK)',
-            data: {{ prices|safe }},
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.3,
-            fill: false,
-        }]
-    },
-    options: {
-        scales: {
-            x: { display: true },
-            y: { display: true }
-        }
-    }
-});
-</script>
-{% endblock %}
+        var ctx = document.getElementById('stockChart').getContext('2d');
+        var stockChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Cena akcie (KOMB.PR)',
+                    data: prices,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Datum'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Cena (CZK)'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
