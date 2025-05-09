@@ -1,37 +1,44 @@
-# investicnidenik/models.py
+# denik/models.py
 from django.db import models
 
-class Asset(models.Model):
-    name = models.CharField(max_length=100)
-    asset_type = models.CharField(max_length=50)
-    symbol = models.CharField(max_length=10)
-    current_price = models.DecimalField(max_digits=10, decimal_places=2)
+class Investice(models.Model):
+    TYPY = [
+        ('akcie', 'Akcie'),
+        ('etf', 'ETF'),
+        ('krypto', 'Kryptoměna'),
+        ('nemovitost', 'Nemovitost'),
+        ('jine', 'Jiné'),
+    ]
+
+    nazev = models.CharField(max_length=100)
+    typ = models.CharField(max_length=20, choices=TYPY)
+    ticker = models.CharField(max_length=20, blank=True, null=True)
+    mena = models.CharField(max_length=10, default='CZK')
 
     def __str__(self):
-        return f"{self.name} ({self.symbol})"
+        return f"{self.nazev} ({self.ticker})"
 
-class Trade(models.Model):
-    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
-    date = models.DateField()
-    trade_type = models.CharField(max_length=10, choices=[('BUY', 'Buy'), ('SELL', 'Sell')])
-    quantity = models.IntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
 
-    def __str__(self):
-        return f"{self.trade_type} {self.quantity} {self.asset.symbol} on {self.date}"
+class Transakce(models.Model):
+    TYP_TRANS = [
+        ('nákup', 'Nákup'),
+        ('prodej', 'Prodej'),
+    ]
 
-class Note(models.Model):
-    trade = models.ForeignKey(Trade, on_delete=models.CASCADE)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    investice = models.ForeignKey(Investice, on_delete=models.CASCADE, related_name='transakce')
+    datum = models.DateField()
+    cena_za_jednotku = models.DecimalField(max_digits=10, decimal_places=2)
+    mnozstvi = models.DecimalField(max_digits=10, decimal_places=2)
+    typ = models.CharField(max_length=10, choices=TYP_TRANS)
 
     def __str__(self):
-        return f"Note for {self.trade}"
+        return f"{self.typ.capitalize()} {self.investice.nazev} - {self.datum}"
 
-class Investment(models.Model):
-    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
-    amount_invested = models.DecimalField(max_digits=12, decimal_places=2)
-    date_invested = models.DateField()
+
+class Poznamka(models.Model):
+    investice = models.ForeignKey(Investice, on_delete=models.CASCADE, related_name='poznamky')
+    text = models.TextField()
+    datum = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Investment in {self.asset.name} on {self.date_invested}"
+        return f"Poznámka k {self.investice.nazev} - {self.datum.strftime('%d.%m.%Y')}"

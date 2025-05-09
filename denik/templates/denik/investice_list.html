@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seznam investic</title>
+</head>
+<body>
+    <h1>Seznam všech investic</h1>
+    <ul>
+        {% for i in investice %}
+            <li>
+                <a href="{% url 'investice_detail' i.pk %}">
+                    {{ i.nazev }} ({{ i.typ }})
+                </a>
+            </li>
+        {% empty %}
+            <li>Žádné investice zatím nejsou zaznamenány.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}">Zpět na úvod</a>
+</body>
+</html>
