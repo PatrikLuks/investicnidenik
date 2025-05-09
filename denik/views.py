@@ -10,6 +10,8 @@ from .models import Investice, Transakce, Poznamka
 from .forms import TransakceForm
 from django.http import HttpResponseRedirect
 from .forms import PoznamkaForm
+from django.shortcuts import render
+from .models import Aktivum  # Pokud máš model Aktivum
 
 
 def home(request):
@@ -105,3 +107,9 @@ def delete_poznamka(request, poznamka_id):
     investice_id = poznamka.investice.id
     poznamka.delete()
     return HttpResponseRedirect(reverse('investice_detail', args=[investice_id]))
+
+
+def seznam_aktiv(request):
+    # Pokud už máš model pro aktiva, tak načteme všechna aktiva
+    aktiva = Aktivum.objects.all()
+    return render(request, 'denik/seznam_aktiv.html', {'aktiva': aktiva})

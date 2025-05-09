@@ -11,4 +11,6 @@ urlpatterns = [
     path('poznamka/edit/<int:poznamka_id>/', views.edit_poznamka, name='edit_poznamka'),
     path('poznamka/delete/<int:poznamka_id>/', views.delete_poznamka, name='delete_poznamka'),
     # Další cesty
+    path('seznam_aktiv/', views.seznam_aktiv, name='seznam_aktiv'),
+
 ]

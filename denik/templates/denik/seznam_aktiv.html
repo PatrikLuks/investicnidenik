@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seznam aktiv</title>
+</head>
+<body>
+    <h1>Seznam aktiv</h1>
+    <ul>
+        {% for aktivum in aktiva %}
+            <li>{{ aktivum.name }} - {{ aktivum.description }}</li>
+        {% empty %}
+            <li>Žádná aktiva nejsou k dispozici.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
