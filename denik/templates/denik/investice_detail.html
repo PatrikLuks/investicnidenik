@@ -1,32 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Detail investice</title>
-</head>
-<body>
-    <h1>Detail: {{ investice.nazev }}</h1>
-    <p>Typ: {{ investice.typ }}</p>
-    <p>Ticker: {{ investice.ticker }}</p>
-    <p>Měna: {{ investice.mena }}</p>
+{% extends 'denik/base.html' %}
 
-    <h2>Transakce</h2>
-    <ul>
-        {% for t in transakce %}
-            <li>{{ t.datum }} – {{ t.typ }} {{ t.mnozstvi }} ks za {{ t.cena_za_jednotku }} {{ investice.mena }}</li>
-        {% empty %}
-            <li>Žádné transakce.</li>
-        {% endfor %}
-    </ul>
+{% block content %}
+<h1>{{ investice.nazev }}</h1>
+<p>Typ: {{ investice.typ }}</p>
+<p>Ticker: {{ investice.ticker }}</p>
+<p>Měna: {{ investice.mena }}</p>
 
-    <h2>Poznámky</h2>
-    <ul>
-        {% for p in poznamky %}
-            <li>{{ p.datum|date:"d.m.Y H:i" }} – {{ p.text }}</li>
-        {% empty %}
-            <li>Žádné poznámky.</li>
-        {% endfor %}
-    </ul>
+<h2>Transakce</h2>
+<ul class="list-group">
+    {% for t in transakce %}
+        <li class="list-group-item">{{ t.datum }} – {{ t.typ }} {{ t.mnozstvi }} ks za {{ t.cena_za_jednotku }} {{ investice.mena }}</li>
+    {% empty %}
+        <li class="list-group-item">Žádné transakce.</li>
+    {% endfor %}
+</ul>
 
-    <a href="{% url 'investice_list' %}">Zpět na seznam investic</a>
-</body>
-</html>
+<h2>Poznámky</h2>
+<ul class="list-group">
+    {% for p in poznamky %}
+        <li class="list-group-item">{{ p.datum|date:"d.m.Y H:i" }} – {{ p.text }}</li>
+    {% empty %}
+        <li class="list-group-item">Žádné poznámky.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'investice_list' %}" class="btn btn-secondary mt-3">Zpět na seznam investic</a>
+{% endblock %}

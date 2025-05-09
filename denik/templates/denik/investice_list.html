@@ -1,21 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Seznam investic</title>
-</head>
-<body>
+{% extends 'denik/base.html' %}
+
+{% block content %}
     <h1>Seznam všech investic</h1>
-    <ul>
+    <ul class="list-group">
         {% for i in investice %}
-            <li>
+            <li class="list-group-item">
                 <a href="{% url 'investice_detail' i.pk %}">
                     {{ i.nazev }} ({{ i.typ }})
                 </a>
             </li>
         {% empty %}
-            <li>Žádné investice zatím nejsou zaznamenány.</li>
+            <li class="list-group-item">Žádné investice zatím nejsou zaznamenány.</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'home' %}">Zpět na úvod</a>
-</body>
-</html>
+{% endblock %}
