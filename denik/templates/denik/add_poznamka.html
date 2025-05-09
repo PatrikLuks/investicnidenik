@@ -1,0 +1,14 @@
+<!-- denik/templates/denik/add_poznamka.html -->
+{% extends 'denik/base.html' %}
+
+{% block content %}
+    <h1>Přidat poznámku k investici: {{ investice.nazev }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Přidat poznámku</button>
+    </form>
+
+    <a href="{% url 'investice_detail' investice.id %}" class="btn btn-secondary mt-3">Zpět na detail investice</a>
+{% endblock %}

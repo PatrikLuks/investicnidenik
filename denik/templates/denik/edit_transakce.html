@@ -1,0 +1,14 @@
+<!-- denik/templates/denik/edit_transakce.html -->
+{% extends 'denik/base.html' %}
+
+{% block content %}
+    <h1>Úprava transakce</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Upravit transakci</button>
+    </form>
+
+    <a href="{% url 'investice_detail' transakce.investice.id %}" class="btn btn-secondary mt-3">Zpět na detail investice</a>
+{% endblock %}

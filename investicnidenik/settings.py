@@ -55,11 +55,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'investicnidenik.urls'
 
+# my_project/settings.py
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'frontend/templates'],  # přidání cesty pro šablony
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'templates'],  # Místo, kde budou šablony pro celý projekt
+        'APP_DIRS': True,  # Tato volba umožní automatické hledání šablon v aplikacích
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
