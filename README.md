@@ -1,27 +1,22 @@
-# 📈 Investiční deník
+# Investiční deník
 
-Tato webová aplikace vytvořená v Djangu slouží jako osobní investiční deník. Umožňuje sledování obchodů, aktiv, výnosů a poznámek k investičním rozhodnutím.
+Aplikace pro sledování investic, jejich transakcí a poznámek. Umožňuje přidávat nové investice, transakce a poznámky přes webové rozhraní.
 
-## 🧠 Funkce
-- Přehled investičních aktiv (např. akcie, krypto, fondy, atd.)
-- Záznam jednotlivých obchodů (nákup/prodej)
-- Výpočet výnosů a ztrát
-- Možnost přidávat vlastní poznámky k obchodům
-- Administrace dat přes Django admin
+## Funkce:
+- Zobrazování seznamu všech investic
+- Detailní zobrazení investice s transakcemi a poznámkami
+- Možnost přidávat nové záznamy do aplikace (investice, transakce, poznámky)
 
-## 🧱 Použité technologie
-- Python 3
-- Django 5
+## Technologie:
+- Django 4.x
 - SQLite (pro vývoj)
-- HTML, CSS (základní šablony)
+- Git, GitHub pro verzování
 
-## 🔧 Instalace
-```bash
-git clone https://github.com/PatrikLuks/investicnidenik.git
-cd investicnidenik
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
+## Jak spustit:
+1. Klonujte tento repozitář.
+2. Vytvořte virtuální prostředí:
+3. Aktivujte virtuální prostředí a nainstalujte závislosti:
+4. Spusťte migrace:
+5. Vytvořte superuživatele:
+6. Spusťte server:
+7. Přejděte na `/admin/` pro přidání dat a `/` pro zobrazení aplikace.
