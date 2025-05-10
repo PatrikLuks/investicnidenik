@@ -1,15 +1,19 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Investice, Transakce, Poznamka, Obchod  # Odstraněn neplatný model `Aktivum`
-from .forms import InvesticeForm, TransakceForm, PoznamkaForm
-from django.http import HttpResponseRedirect
+from .forms import InvesticeForm, TransakceForm, PoznamkaForm, UserRegisterForm, UserUpdateForm
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse
-from django.db.models import Q
+from django.db.models import Q, Sum
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+import csv
 
 # Úvodní stránka
 def home(request):
     return render(request, 'denik/home.html')
 
 # Seznam investic
+@login_required
 def investice_list(request):
     query = request.GET.get('q')
     typ_filter = request.GET.get('typ')
@@ -23,6 +27,7 @@ def investice_list(request):
     return render(request, 'denik/investice_list.html', {'investice_list': investice, 'query': query, 'typ_filter': typ_filter})
 
 # Detail investice
+@login_required
 def investice_detail(request, pk):
     investice = get_object_or_404(Investice, pk=pk)
     transakce = Transakce.objects.filter(investice=investice)
@@ -165,3 +170,49 @@ def delete_investice(request, pk):
         investice.delete()
         return redirect('investice_list')
     return render(request, 'denik/delete_investice.html', {'investice': investice})
+
+def investice_chart_data(request):
+    data = Investice.objects.values('typ').annotate(total=Sum('cena')).order_by('typ')
+    chart_data = {
+        'labels': [item['typ'] for item in data],
+        'data': [item['total'] for item in data],
+    }
+    return JsonResponse(chart_data)
+
+def export_investice_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="investice.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Název', 'Typ', 'Měna', 'Popis'])
+
+    investice = Investice.objects.all()
+    for item in investice:
+        writer.writerow([item.nazev, item.typ, item.mena, item.popis])
+
+    return response
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+@login_required
+def user_profile(request):
+    return render(request, 'registration/profile.html', {'user': request.user})
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserUpdateForm(instance=request.user)
+    return render(request, 'registration/edit_profile.html', {'form': form})

@@ -1,10 +1,16 @@
 {% extends 'denik/base.html' %}
 
+{% block title %}Detail investice{% endblock %}
+
 {% block content %}
-    <h1>Detail investice</h1>
-    <p>Název: {{ investice.nazev }}</p>
-    <p>Popis: {{ investice.popis }}</p>
-    <a href="{% url 'edit_investice' investice.id %}">Upravit</a>
-    <a href="{% url 'delete_investice' investice.id %}">Smazat</a>
-    <a href="{% url 'investice_list' %}">Zpět na seznam investic</a>
+<h1>Detail investice</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ investice.nazev }}</h5>
+        <p class="card-text">Typ: {{ investice.typ }}</p>
+        <p class="card-text">Měna: {{ investice.mena }}</p>
+        <p class="card-text">Popis: {{ investice.popis }}</p>
+    </div>
+</div>
+<a href="{% url 'investice_list' %}" class="btn btn-secondary mt-3">Zpět na seznam</a>
 {% endblock %}

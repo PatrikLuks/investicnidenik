@@ -1,8 +1,12 @@
 from django.contrib import admin
-from django.urls import path, include  # ⬅️ přidáno "include"
+from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('frontend.urls')),  # ⬅️ přidáno propojení na frontend.urls
-    path('denik/', include('denik.urls')),  # Přidáno propojení na denik.urls
+    path('', include('frontend.urls')),
+    path('denik/', include('denik.urls')),
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

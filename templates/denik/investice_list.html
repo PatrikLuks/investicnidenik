@@ -1,19 +1,33 @@
 {% extends 'denik/base.html' %}
 
+{% block title %}Seznam investic{% endblock %}
+
 {% block content %}
-    <h1>Seznam investic</h1>
-    <form method="get">
-        <input type="text" name="q" placeholder="Hledat..." value="{{ request.GET.q }}">
-        <button type="submit">Hledat</button>
-    </form>
-    <ul>
+<h1>Seznam investic</h1>
+{% if user.is_authenticated %}
+    <a href="{% url 'export_investice_csv' %}" class="btn btn-success mb-3">Exportovat do CSV</a>
+{% endif %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <th>Typ</th>
+            <th>Měna</th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for investice in investice_list %}
-            <li>
-                <a href="{% url 'investice_detail' investice.id %}">{{ investice.nazev }}</a>
-                <a href="{% url 'edit_investice' investice.id %}">[Upravit]</a>
-                <a href="{% url 'delete_investice' investice.id %}">[Smazat]</a>
-            </li>
+        <tr>
+            <td>{{ investice.nazev }}</td>
+            <td>{{ investice.typ }}</td>
+            <td>{{ investice.mena }}</td>
+            <td>
+                <a href="{% url 'investice_detail' investice.pk %}" class="btn btn-primary btn-sm">Detail</a>
+            </td>
+        </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'add_investice' %}">Přidat novou investici</a>
+    </tbody>
+</table>
 {% endblock %}
