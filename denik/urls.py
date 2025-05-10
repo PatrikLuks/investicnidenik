@@ -10,7 +10,9 @@ urlpatterns = [
     path('transakce/delete/<int:transakce_id>/', views.delete_transakce, name='delete_transakce'),
     path('poznamka/edit/<int:poznamka_id>/', views.edit_poznamka, name='edit_poznamka'),
     path('poznamka/delete/<int:poznamka_id>/', views.delete_poznamka, name='delete_poznamka'),
-    # Další cesty
     path('seznam_aktiv/', views.seznam_aktiv, name='seznam_aktiv'),
-
+    path('obchody/', views.obchody_list, name='obchody_list'),
+    path('poznamky/', views.poznamky_list, name='poznamky_list'),
+    
 ]
+

@@ -42,3 +42,22 @@ class Poznamka(models.Model):
 
     def __str__(self):
         return f"Poznámka k {self.investice.nazev} - {self.datum.strftime('%d.%m.%Y')}"
+
+class Obchod(models.Model):
+    nazev = models.CharField(max_length=100)
+    aktivum = models.CharField(max_length=100)
+    mnozstvi = models.FloatField()
+    cena = models.DecimalField(max_digits=10, decimal_places=2)
+    datum = models.DateField()
+
+    def __str__(self):
+        return f"{self.nazev} - {self.aktivum} ({self.datum})"
+
+
+class Poznamka(models.Model):
+    titulek = models.CharField(max_length=100)
+    obsah = models.TextField()
+    datum_vytvoreni = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.titulek

@@ -1,0 +1,10 @@
+{% extends 'denik/home.html' %}
+
+{% block content %}
+    <h2>Seznam obchodů</h2>
+    <ul>
+        {% for obchod in obchody %}
+            <li>{{ obchod.nazev }} - {{ obchod.aktivum }} - {{ obchod.mnozstvi }} ks - {{ obchod.cena }} Kč - {{ obchod.datum }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

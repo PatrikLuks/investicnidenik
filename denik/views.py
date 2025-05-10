@@ -12,6 +12,8 @@ from django.http import HttpResponseRedirect
 from .forms import PoznamkaForm
 from django.shortcuts import render
 from .models import Aktivum  # Pokud máš model Aktivum
+from .models import Obchod
+from .models import Poznamka
 
 
 def home(request):
@@ -113,3 +115,17 @@ def seznam_aktiv(request):
     # Pokud už máš model pro aktiva, tak načteme všechna aktiva
     aktiva = Aktivum.objects.all()
     return render(request, 'denik/seznam_aktiv.html', {'aktiva': aktiva})
+
+def obchody_list(request):
+    return render(request, 'denik/obchody_list.html')
+
+def poznamky_list(request):
+    return render(request, 'denik/poznamky_list.html')
+
+def obchod_list(request):
+    obchody = Obchod.objects.all()
+    return render(request, 'denik/obchod_list.html', {'obchody': obchody})
+
+def poznamka_list(request):
+    poznamky = Poznamka.objects.all()
+    return render(request, 'denik/poznamka_list.html', {'poznamky': poznamky})

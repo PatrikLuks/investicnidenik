@@ -1,0 +1,10 @@
+{% extends 'denik/home.html' %}
+
+{% block content %}
+    <h2>Seznam poznámek</h2>
+    <ul>
+        {% for poznamka in poznamky %}
+            <li>{{ poznamka.titulek }} - {{ poznamka.obsah }} - {{ poznamka.datum_vytvoreni }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
