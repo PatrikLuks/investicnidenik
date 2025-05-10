@@ -14,6 +14,7 @@ class Investice(models.Model):
     typ = models.CharField(max_length=20, choices=TYPY)
     ticker = models.CharField(max_length=20, blank=True, null=True)
     mena = models.CharField(max_length=10, default='CZK')
+    popis = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.nazev} ({self.ticker})"

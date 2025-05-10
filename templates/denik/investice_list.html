@@ -1,19 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seznam investic</title>
-</head>
-<body>
+{% extends 'denik/base.html' %}
+
+{% block content %}
     <h1>Seznam investic</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Hledat..." value="{{ request.GET.q }}">
+        <button type="submit">Hledat</button>
+    </form>
     <ul>
-        {% for investice in investice %}
+        {% for investice in investice_list %}
             <li>
-                <a href="{% url 'investice_detail' investice.pk %}">{{ investice.nazev }}</a>
+                <a href="{% url 'investice_detail' investice.id %}">{{ investice.nazev }}</a>
+                <a href="{% url 'edit_investice' investice.id %}">[Upravit]</a>
+                <a href="{% url 'delete_investice' investice.id %}">[Smazat]</a>
             </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'home' %}">Zpět na úvodní stránku</a>
-</body>
-</html>
+    <a href="{% url 'add_investice' %}">Přidat novou investici</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'denik/base.html' %}
+
+{% block content %}
+    <h1>Upravit transakci</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Uložit změny</button>
+    </form>
+    <a href="{% url 'investice_detail' transakce.investice.pk %}">Zpět na detail investice</a>
+    <a href="{% url 'edit_transakce' transakce.id %}">Upravit</a>
+    <a href="{% url 'delete_transakce' transakce.id %}">Smazat</a>
+{% endblock %}

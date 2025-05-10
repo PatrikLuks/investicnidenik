@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail investice</title>
-</head>
-<body>
-    <h1>Detail investice</h1>
-    <h2>{{ investice.nazev }}</h2>
-    <p>Typ: {{ investice.typ }}</p>
-    <p>Ticker: {{ investice.ticker }}</p>
-    <p>Měna: {{ investice.mena }}</p>
+{% extends 'denik/base.html' %}
 
+{% block content %}
+    <h1>Detail investice</h1>
+    <p>Název: {{ investice.nazev }}</p>
+    <p>Popis: {{ investice.popis }}</p>
+    <a href="{% url 'edit_investice' investice.id %}">Upravit</a>
+    <a href="{% url 'delete_investice' investice.id %}">Smazat</a>
     <a href="{% url 'investice_list' %}">Zpět na seznam investic</a>
-</body>
-</html>
+{% endblock %}

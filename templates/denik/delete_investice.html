@@ -1,0 +1,11 @@
+{% extends 'denik/base.html' %}
+
+{% block content %}
+    <h1>Smazat investici</h1>
+    <p>Opravdu chcete smazat investici "{{ investice.nazev }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Ano, smazat</button>
+    </form>
+    <a href="{% url 'investice_detail' investice.pk %}">Zpět na detail investice</a>
+{% endblock %}
