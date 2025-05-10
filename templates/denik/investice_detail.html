@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail investice</title>
+</head>
+<body>
+    <h1>Detail investice</h1>
+    <h2>{{ investice.nazev }}</h2>
+    <p>Typ: {{ investice.typ }}</p>
+    <p>Ticker: {{ investice.ticker }}</p>
+    <p>Měna: {{ investice.mena }}</p>
+
+    <a href="{% url 'investice_list' %}">Zpět na seznam investic</a>
+</body>
+</html>

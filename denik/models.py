@@ -20,44 +20,30 @@ class Investice(models.Model):
 
 
 class Transakce(models.Model):
-    TYP_TRANS = [
-        ('nákup', 'Nákup'),
-        ('prodej', 'Prodej'),
-    ]
-
     investice = models.ForeignKey(Investice, on_delete=models.CASCADE, related_name='transakce')
     datum = models.DateField()
-    cena_za_jednotku = models.DecimalField(max_digits=10, decimal_places=2)
     mnozstvi = models.DecimalField(max_digits=10, decimal_places=2)
-    typ = models.CharField(max_length=10, choices=TYP_TRANS)
+    cena = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.typ.capitalize()} {self.investice.nazev} - {self.datum}"
+        return f"{self.investice.nazev} - {self.datum}"
 
 
 class Poznamka(models.Model):
     investice = models.ForeignKey(Investice, on_delete=models.CASCADE, related_name='poznamky')
-    text = models.TextField()
-    datum = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Poznámka k {self.investice.nazev} - {self.datum.strftime('%d.%m.%Y')}"
-
-class Obchod(models.Model):
-    nazev = models.CharField(max_length=100)
-    aktivum = models.CharField(max_length=100)
-    mnozstvi = models.FloatField()
-    cena = models.DecimalField(max_digits=10, decimal_places=2)
-    datum = models.DateField()
-
-    def __str__(self):
-        return f"{self.nazev} - {self.aktivum} ({self.datum})"
-
-
-class Poznamka(models.Model):
     titulek = models.CharField(max_length=100)
     obsah = models.TextField()
     datum_vytvoreni = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.titulek
+
+
+class Obchod(models.Model):
+    aktivum = models.ForeignKey(Investice, on_delete=models.CASCADE, related_name='obchody')
+    mnozstvi = models.DecimalField(max_digits=10, decimal_places=2)
+    cena = models.DecimalField(max_digits=10, decimal_places=2)
+    datum = models.DateField()
+
+    def __str__(self):
+        return f"{self.aktivum.nazev} - {self.datum}"
