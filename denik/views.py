@@ -1,20 +1,32 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Investice, Transakce, Poznamka, Obchod  # Odstraněn neplatný model `Aktivum`
+from .models import Investice, Transakce, Poznamka, Obchod, UserActivityLog  # Odstraněn neplatný model `Aktivum`
 from .forms import InvesticeForm, TransakceForm, PoznamkaForm, UserRegisterForm, UserUpdateForm
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse
 from django.db.models import Q, Sum
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 import csv
+
+def is_admin(user):
+    return user.groups.filter(name='Administrators').exists()
+
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    logs = UserActivityLog.objects.all().order_by('-timestamp')[:50]
+    return render(request, 'denik/admin_dashboard.html', {'logs': logs})
 
 # Úvodní stránka
 def home(request):
     return render(request, 'denik/home.html')
 
+def log_user_activity(user, action):
+    UserActivityLog.objects.create(user=user, action=action)
+
 # Seznam investic
 @login_required
 def investice_list(request):
+    log_user_activity(request.user, "Viewed investice list")
     query = request.GET.get('q')
     typ_filter = request.GET.get('typ')
     investice = Investice.objects.all()
@@ -29,6 +41,7 @@ def investice_list(request):
 # Detail investice
 @login_required
 def investice_detail(request, pk):
+    log_user_activity(request.user, f"Viewed investice detail for ID {pk}")
     investice = get_object_or_404(Investice, pk=pk)
     transakce = Transakce.objects.filter(investice=investice)
     poznamky = Poznamka.objects.filter(investice=investice)

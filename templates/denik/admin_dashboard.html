@@ -1,0 +1,28 @@
+{% extends 'denik/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+<p>Vítejte v administračním rozhraní. Zde můžete spravovat aplikaci.</p>
+
+<h2>Logy aktivit uživatelů</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Uživatel</th>
+            <th>Akce</th>
+            <th>Čas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.user.username }}</td>
+            <td>{{ log.action }}</td>
+            <td>{{ log.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
