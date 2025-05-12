@@ -26,5 +26,6 @@ urlpatterns = [
     path('accounts/profile/', views.user_profile, name='profile'),
     path('accounts/edit-profile/', views.edit_profile, name='edit_profile'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('notifications/', views.notifications, name='notifications'),
 ]
 

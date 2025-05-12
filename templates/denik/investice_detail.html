@@ -12,5 +12,17 @@
         <p class="card-text">Popis: {{ investice.popis }}</p>
     </div>
 </div>
+<h2>Transakce</h2>
+<ul>
+    {% for transakce in transakce %}
+    <li>{{ transakce }}</li>
+    {% endfor %}
+</ul>
+<h2>Poznámky</h2>
+<ul>
+    {% for poznamka in poznamky %}
+    <li>{{ poznamka }}</li>
+    {% endfor %}
+</ul>
 <a href="{% url 'investice_list' %}" class="btn btn-secondary mt-3">Zpět na seznam</a>
 {% endblock %}

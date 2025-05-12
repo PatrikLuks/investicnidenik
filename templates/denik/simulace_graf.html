@@ -1,0 +1,24 @@
+{% extends 'denik/base.html' %}
+
+{% block title %}Simulace růstu{% endblock %}
+
+{% block content %}
+<h1>Simulace růstu investice: {{ investice.nazev }}</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Rok</th>
+            <th>Hodnota</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in simulace %}
+        <tr>
+            <td>{{ data.rok }}</td>
+            <td>{{ data.hodnota|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'investice_list' %}" class="btn btn-secondary">Zpět na seznam</a>
+{% endblock %}

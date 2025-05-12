@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Investice, Transakce, Poznamka, Obchod, UserActivityLog  # Odstraněn neplatný model `Aktivum`
+from .models import Investice, Transakce, Poznamka, Obchod, UserActivityLog, Notification  # Odstraněn neplatný model `Aktivum`
 from .forms import InvesticeForm, TransakceForm, PoznamkaForm, UserRegisterForm, UserUpdateForm
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse
@@ -26,26 +26,15 @@ def log_user_activity(user, action):
 # Seznam investic
 @login_required
 def investice_list(request):
-    log_user_activity(request.user, "Viewed investice list")
-    query = request.GET.get('q')
-    typ_filter = request.GET.get('typ')
     investice = Investice.objects.all()
-
-    if query:
-        investice = investice.filter(Q(nazev__icontains=query) | Q(ticker__icontains=query))
-    if typ_filter:
-        investice = investice.filter(typ=typ_filter)
-
-    return render(request, 'denik/investice_list.html', {'investice_list': investice, 'query': query, 'typ_filter': typ_filter})
+    return render(request, 'denik/investice_list.html', {'investice_list': investice})
 
 # Detail investice
 @login_required
 def investice_detail(request, pk):
-    log_user_activity(request.user, f"Viewed investice detail for ID {pk}")
     investice = get_object_or_404(Investice, pk=pk)
     transakce = Transakce.objects.filter(investice=investice)
     poznamky = Poznamka.objects.filter(investice=investice)
-
     return render(request, 'denik/investice_detail.html', {
         'investice': investice,
         'transakce': transakce,
@@ -229,3 +218,19 @@ def edit_profile(request):
     else:
         form = UserUpdateForm(instance=request.user)
     return render(request, 'registration/edit_profile.html', {'form': form})
+
+def simulace_rustu(request, pk):
+    investice = get_object_or_404(Investice, pk=pk)
+    # Simulace růstu investice (příklad logiky)
+    simulace_data = {
+        'investice': investice,
+        'simulace': [
+            {'rok': i, 'hodnota': investice.cena * (1 + 0.05) ** i} for i in range(1, 11)
+        ]
+    }
+    return render(request, 'denik/simulace_graf.html', simulace_data)
+
+@login_required
+def notifications(request):
+    user_notifications = Notification.objects.filter(user=request.user, is_read=False)
+    return render(request, 'denik/notifications.html', {'notifications': user_notifications})

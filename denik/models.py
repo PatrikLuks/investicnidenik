@@ -63,6 +63,16 @@ class UserActivityLog(models.Model):
         return f"{self.user.username} - {self.action} - {self.timestamp}"
 
 
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    created_at = models.DateTimeField(default=now)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notification for {self.user.username}: {self.message}"
+
+
 def create_default_groups():
     Group.objects.get_or_create(name='Administrators')
     Group.objects.get_or_create(name='Regular Users')

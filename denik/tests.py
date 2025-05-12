@@ -1,9 +1,12 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth.models import User
 from .models import Investice, Transakce, Poznamka
 
 class InvesticeModelTest(TestCase):
     def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
         self.investice = Investice.objects.create(nazev="Testovací investice", popis="Popis testovací investice")
 
     def test_investice_creation(self):
@@ -12,6 +15,8 @@ class InvesticeModelTest(TestCase):
 
 class TransakceModelTest(TestCase):
     def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
         self.investice = Investice.objects.create(nazev="Testovací investice", popis="Popis testovací investice")
         self.transakce = Transakce.objects.create(investice=self.investice, datum="2025-05-10", cena=100, mnozstvi=10)
 
@@ -21,6 +26,8 @@ class TransakceModelTest(TestCase):
 
 class PoznamkaModelTest(TestCase):
     def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
         self.investice = Investice.objects.create(nazev="Testovací investice", popis="Popis testovací investice")
         self.poznamka = Poznamka.objects.create(investice=self.investice, obsah="Testovací poznámka")
 
@@ -29,6 +36,8 @@ class PoznamkaModelTest(TestCase):
 
 class InvesticeViewTest(TestCase):
     def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
         self.investice = Investice.objects.create(nazev="Testovací investice", popis="Popis testovací investice")
 
     def test_investice_list_view(self):

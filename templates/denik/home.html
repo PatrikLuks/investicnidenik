@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investiční deník</title>
-</head>
-<body>
-    <h1>Vítejte v investičním deníku</h1>
-    <p>Toto je úvodní stránka vaší aplikace.</p>
-    <a href="{% url 'investice_list' %}">Seznam investic</a>
-</body>
-</html>
+{% extends 'denik/base.html' %}
+
+{% block title %}Úvodní stránka{% endblock %}
+
+{% block content %}
+<h1>Vítejte v aplikaci Investiční deník</h1>
+<p>Tato aplikace vám pomůže sledovat vaše investice, transakce a poznámky.</p>
+<a href="{% url 'investice_list' %}" class="btn btn-primary">Zobrazit investice</a>
+{% endblock %}
