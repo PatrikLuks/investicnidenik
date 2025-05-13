@@ -16,14 +16,20 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link" href="/">Domů</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/denik/investice/">Investice</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/denik/notifications/">Notifikace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/denik/admin_dashboard/">Admin Dashboard</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profile' %}">Můj profil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'edit_profile' %}">Upravit profil</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">Odhlásit se</a>

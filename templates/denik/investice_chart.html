@@ -1,36 +1,11 @@
 {% extends 'denik/base.html' %}
 
-{% block title %}Graf investic{% endblock %}
+{% block title %}Graf investice{% endblock %}
 
 {% block content %}
-<h1>Graf investic podle typu</h1>
-<canvas id="investiceChart" width="400" height="200"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    fetch("{% url 'investice_chart_data' %}")
-        .then(response => response.json())
-        .then(data => {
-            const ctx = document.getElementById('investiceChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Celková cena',
-                        data: data.data,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        });
-</script>
+<h1>Graf vývoje ceny investice: {{ investice.nazev }}</h1>
+<div>
+    {{ plot_div|safe }}
+</div>
+<a href="{% url 'investice_detail' investice.id %}" class="btn btn-primary">Zpět na detail investice</a>
 {% endblock %}

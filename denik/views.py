@@ -1,12 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Investice, Transakce, Poznamka, Obchod, UserActivityLog, Notification  # Odstraněn neplatný model `Aktivum`
-from .forms import InvesticeForm, TransakceForm, PoznamkaForm, UserRegisterForm, UserUpdateForm
+from .forms import InvesticeForm, TransakceForm, PoznamkaForm, UserRegisterForm, UserUpdateForm, RealTimeInvesticeForm
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse
 from django.db.models import Q, Sum
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 import csv
+from plotly.offline import plot
+from plotly.graph_objs import Scatter
+import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 def is_admin(user):
     return user.groups.filter(name='Administrators').exists()
@@ -26,8 +32,71 @@ def log_user_activity(user, action):
 # Seznam investic
 @login_required
 def investice_list(request):
-    investice = Investice.objects.all()
-    return render(request, 'denik/investice_list.html', {'investice_list': investice})
+    if request.method == 'POST':
+        form = RealTimeInvesticeForm(request.POST)
+        if form.is_valid():
+            asset_type = form.cleaned_data['asset_type']
+            asset_name = form.cleaned_data['asset_name']
+            Investice.objects.create(
+                nazev=asset_name,
+                typ=asset_type,
+                uzivatel=request.user
+            )
+            return redirect('investice_list')
+    else:
+        form = RealTimeInvesticeForm()
+
+    # Fetch real market data for various asset types
+    stocks = []
+    etfs = []
+    cryptos = []
+    real_estate = []
+    try:
+        # Fetch stocks
+        stock_response = requests.get('https://api.example.com/stocks', params={
+            'currency': 'usd',
+            'limit': 10
+        })
+        if stock_response.status_code == 200:
+            stocks = stock_response.json()
+
+        # Fetch ETFs
+        etf_response = requests.get('https://api.example.com/etfs', params={
+            'currency': 'usd',
+            'limit': 10
+        })
+        if etf_response.status_code == 200:
+            etfs = etf_response.json()
+
+        # Fetch cryptocurrencies
+        crypto_response = requests.get('https://api.coingecko.com/api/v3/coins/markets', params={
+            'vs_currency': 'usd',
+            'order': 'market_cap_desc',
+            'per_page': 10,
+            'page': 1,
+            'sparkline': False
+        })
+        if crypto_response.status_code == 200:
+            cryptos = crypto_response.json()
+
+        # Fetch real estate data (mocked example)
+        real_estate = [
+            {'name': 'Nemovitost A', 'symbol': 'REAL1', 'current_price': 500000},
+            {'name': 'Nemovitost B', 'symbol': 'REAL2', 'current_price': 750000}
+        ]
+
+    except requests.RequestException as e:
+        print(f"Error fetching market data: {e}")
+
+    investice_list = Investice.objects.filter(uzivatel=request.user)
+    return render(request, 'denik/investice_list.html', {
+        'investice_list': investice_list,
+        'form': form,
+        'stocks': stocks,
+        'etfs': etfs,
+        'cryptos': cryptos,
+        'real_estate': real_estate
+    })
 
 # Detail investice
 @login_required
@@ -42,14 +111,23 @@ def investice_detail(request, pk):
     })
 
 # Přidání investice
+@login_required
 def add_investice(request):
     if request.method == 'POST':
-        form = InvesticeForm(request.POST)
+        form = RealTimeInvesticeForm(request.POST)
         if form.is_valid():
-            form.save()
+            # Process the selected asset and save it as an investment
+            asset_type = form.cleaned_data['asset_type']
+            asset_name = form.cleaned_data['asset_name']
+            Investice.objects.create(
+                nazev=asset_name,
+                typ=asset_type,
+                uzivatel=request.user
+            )
             return redirect('investice_list')
     else:
-        form = InvesticeForm()
+        form = RealTimeInvesticeForm()
+
     return render(request, 'denik/add_investice.html', {'form': form})
 
 # Přidání transakce
@@ -180,6 +258,26 @@ def investice_chart_data(request):
         'data': [item['total'] for item in data],
     }
     return JsonResponse(chart_data)
+
+@login_required
+def investice_chart(request, investice_id):
+    investice = get_object_or_404(Investice, id=investice_id)
+    transakce = Transakce.objects.filter(investice=investice).order_by('datum')
+
+    # Prepare data for the chart
+    dates = [t.datum for t in transakce]
+    prices = [t.cena for t in transakce]
+
+    # Create a Plotly scatter plot
+    scatter = Scatter(x=dates, y=prices, mode='lines+markers', name='Cena investice')
+    layout = {
+        'title': f'Vývoj ceny investice: {investice.nazev}',
+        'xaxis': {'title': 'Datum'},
+        'yaxis': {'title': 'Cena'},
+    }
+    plot_div = plot({'data': [scatter], 'layout': layout}, output_type='div')
+
+    return render(request, 'denik/investice_chart.html', {'plot_div': plot_div, 'investice': investice})
 
 def export_investice_csv(request):
     response = HttpResponse(content_type='text/csv')

@@ -3,7 +3,22 @@
 {% block title %}Úvodní stránka{% endblock %}
 
 {% block content %}
-<h1>Vítejte v aplikaci Investiční deník</h1>
-<p>Tato aplikace vám pomůže sledovat vaše investice, transakce a poznámky.</p>
-<a href="{% url 'investice_list' %}" class="btn btn-primary">Zobrazit investice</a>
+<div class="container text-center">
+    <h1>Vítejte v aplikaci Investiční deník</h1>
+    <p>Tato aplikace vám pomůže sledovat vaše investice, transakce a poznámky.</p>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <a href="/denik/investice/" class="btn btn-primary btn-lg w-100">Investice</a>
+        </div>
+        <div class="col-md-3">
+            <a href="/denik/notifications/" class="btn btn-secondary btn-lg w-100">Notifikace</a>
+        </div>
+        <div class="col-md-3">
+            <a href="/denik/admin_dashboard/" class="btn btn-success btn-lg w-100">Admin Dashboard</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'profile' %}" class="btn btn-info btn-lg w-100">Můj profil</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

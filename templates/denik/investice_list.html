@@ -26,4 +26,91 @@
         {% endfor %}
     </tbody>
 </table>
+
+<h2>Akcie</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <th>Symbol</th>
+            <th>Cena (USD)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in stocks %}
+        <tr>
+            <td>{{ stock.name }}</td>
+            <td>{{ stock.symbol }}</td>
+            <td>{{ stock.current_price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>ETF</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <th>Symbol</th>
+            <th>Cena (USD)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for etf in etfs %}
+        <tr>
+            <td>{{ etf.name }}</td>
+            <td>{{ etf.symbol }}</td>
+            <td>{{ etf.current_price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Kryptoměny</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <th>Symbol</th>
+            <th>Cena (USD)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for crypto in cryptos %}
+        <tr>
+            <td>{{ crypto.name }}</td>
+            <td>{{ crypto.symbol }}</td>
+            <td>{{ crypto.current_price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Nemovitosti</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <th>Symbol</th>
+            <th>Cena (USD)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for real in real_estate %}
+        <tr>
+            <td>{{ real.name }}</td>
+            <td>{{ real.symbol }}</td>
+            <td>{{ real.current_price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Přidat novou investici</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Přidat investici</button>
+</form>
 {% endblock %}
